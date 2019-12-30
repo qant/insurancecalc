@@ -7,9 +7,22 @@ function Insurance(label, year, itype) {
 //To show
 function Interface() {}
 
+Interface.prototype.showError = function(msg, msgClass) {
+  const messageBlock = document.createElement("div");
+  messageBlock.classList = msgClass;
+  messageBlock.innerHTML = `${msg}`;
+  form.insertBefore(messageBlock, document.querySelector(".form-group"));
+
+  if ("error" === msgClass) {
+    setTimeout(function() {
+      document.querySelector("." + msgClass).remove();
+    }, 3000);
+  }
+};
+
 //events
-const calculateBtn = document.getElementById("cotizar-seguro");
-calculateBtn.addEventListener("submit", calcualteBtnAction);
+const form = document.getElementById("cotizar-seguro");
+form.addEventListener("submit", calcualteBtnAction);
 
 function calcualteBtnAction(event) {
   event.preventDefault();
@@ -25,8 +38,10 @@ function calcualteBtnAction(event) {
 
   if (selectedL === "" || selectedT === "" || selectedY === "") {
     console.error("Data miss");
+    interface.showError("Check fields", "error");
   } else {
     console.info("All fine created interface");
+    interface.showError("Fields are OK, calculating...", "correcto");
   }
 }
 
