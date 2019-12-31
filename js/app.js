@@ -54,6 +54,33 @@ Interface.prototype.showError = function(msg, msgClass) {
   }
 };
 
+Interface.prototype.showTotal = function(insurance, total) {
+  let label;
+  switch (insurance.label) {
+    case "1":
+      label = "American";
+      break;
+    case "2":
+      label = "Asiatic";
+      break;
+    case "3":
+      label = "European";
+      break;
+  }
+  let msg = `<div><p class="header">Result:</p>
+  <p>Total: ${Math.round(total)}</p>
+  <p>Type: ${insurance.type}</p>
+  <p>Year: ${insurance.year}</p></div>`;
+
+  const spinner = document.querySelector("#cargando img");
+  spinner.style.display = "block";
+  setTimeout(() => {
+    spinner.style.display = "none";
+    document.querySelector("div.correcto").remove();
+    document.querySelector("#resultado").innerHTML = msg;
+  }, 1000);
+};
+
 //events
 const form = document.getElementById("cotizar-seguro");
 form.addEventListener("submit", calcualteBtnAction);
@@ -78,7 +105,8 @@ function calcualteBtnAction(event) {
     interface.showError("Fields are OK, calculating...", "correcto");
     const insurance = new Insurance(selectedL, selectedY, selectedT);
     const total = insurance.calculate();
-    console.log(total);
+    console.info(total);
+    interface.showTotal(insurance, total);
   }
 }
 
