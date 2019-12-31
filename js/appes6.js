@@ -4,16 +4,16 @@
  * @param {string} year
  * @param {int} type
  */
-class Insurance() {
+class Insurance {
   constructor(label, year, type) {
     this.label = label;
-  this.year = year;
-  this.type = type;
+    this.year = year;
+    this.type = type;
   }
   calculate() {
     const base = 2000;
     let total;
-  
+
     switch (this.label) {
       case "1": //americ
         total = base * 1.15;
@@ -25,38 +25,36 @@ class Insurance() {
         total = base * 1.3;
         break;
     }
+
+    const diff = new Date().getFullYear() - this.year;
+    total = total - (diff * 3) / 100; //3% by year
+
+    if ("basico" === this.type) {
+      total = total * 1.3;
+    } else {
+      total = total * 1.5;
+    }
+
+    return total;
   }
-  
 }
-  const diff = new Date().getFullYear() - this.year;
-  total = total - (diff * 3) / 100; //3% by year
-
-  if ("basico" === this.type) {
-    total = total * 1.3;
-  } else {
-    total = total * 1.5;
-  }
-
-  return total;
-};
 
 //To show
-class Interface() {
-
-  showError(msg, msgClass) {
+class Interface {
+  showMessage(msg, msgClass) {
     const messageBlock = document.createElement("div");
     messageBlock.classList = msgClass;
     messageBlock.innerHTML = `${msg}`;
     form.insertBefore(messageBlock, document.querySelector(".form-group"));
-  
+
     if ("error" === msgClass) {
       setTimeout(function() {
         document.querySelector("." + msgClass).remove();
       }, 3000);
     }
-  };
+  }
 
-  showTotal(insurance, total){
+  showTotal(insurance, total) {
     let label;
     switch (insurance.label) {
       case "1":
@@ -73,7 +71,7 @@ class Interface() {
     <p>Total: ${Math.round(total)}</p>
     <p>Type: ${insurance.type}</p>
     <p>Year: ${insurance.year}</p></div>`;
-  
+
     const spinner = document.querySelector("#cargando img");
     spinner.style.display = "block";
     setTimeout(() => {
@@ -81,8 +79,7 @@ class Interface() {
       document.querySelector("div.correcto").remove();
       document.querySelector("#resultado").innerHTML = msg;
     }, 1000);
-  };
-
+  }
 }
 
 //events
@@ -103,10 +100,10 @@ function calcualteBtnAction(event) {
 
   if (selectedL === "" || selectedT === "" || selectedY === "") {
     console.error("Data miss");
-    interface.showError("Check fields", "error");
+    interface.showMessage("Check fields", "error");
   } else {
     console.info("All fine created interface");
-    interface.showError("Fields are OK, calculating...", "correcto");
+    interface.showMessage("Fields are OK, calculating...", "correcto");
     const insurance = new Insurance(selectedL, selectedY, selectedT);
     const total = insurance.calculate();
     console.info(total);
